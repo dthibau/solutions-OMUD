@@ -37,6 +37,7 @@ stage('Parallel Stage') {
 }
 
 stage('Déploiement artefact') {
+  agent any
   when {
     not {
       branch 'master'
