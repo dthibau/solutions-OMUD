@@ -1,0 +1,18 @@
+# This is the default ansible 'hosts' file.
+#
+
+delivery-service ansible_host=192.168.99.2 ansible_python_interpreter=/usr/bin/python3 ansible_user=vagrant ansible_ssh_private_key_file=/home/dthibau/Formations/DevOps/MyWork/DevOpsDemo/vagrants/.vagrant/machines/host1/virtualbox/private_key
+
+db-delivery ansible_host=192.168.99.3 ansible_python_interpreter=/usr/bin/python3 ansible_user=vagrant ansible_ssh_private_key_file=/home/dthibau/Formations/DevOps/MyWork/DevOpsDemo/vagrants/.vagrant/machines/host2/virtualbox/private_key
+
+[java]
+delivery-service
+
+[postgres]
+db-delivery 
+
+
+
+
+
+
