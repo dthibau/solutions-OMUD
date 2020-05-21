@@ -119,9 +119,6 @@ stage('Parallel Stage') {
     }
     steps {
       echo 'Releasing app'
-      sh 'pwd'
-      sh 'ls -al'
-      sh 'env'
       cleanWs()
 
     // Push on master
