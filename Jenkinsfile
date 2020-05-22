@@ -162,6 +162,13 @@ stage('Parallel Stage') {
         // Deploying to nexus release
         sh './mvnw --settings settings.xml -DskipTests -Pprod clean deploy' 
 
+        def dockerImage
+        dockerImage = docker.build('delivery-service', '.')
+          docker.withRegistry('http://localhost:10000', 'admin_nexus') {
+            dockerImage.push "$mvnVersion"
+        }
+     
+
         echo 'Starting new version'
         // Setting new version 
         newVersion = newVersion.replace('-SNAPSHOT','') + '-SNAPSHOT'
