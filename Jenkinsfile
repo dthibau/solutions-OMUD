@@ -74,10 +74,13 @@ stage('Parallel Stage') {
         not { branch 'master' }
     } 
    steps {
-     unstash 'service'
-     unstash 'dockerfile'
      script {
-        def mvnVersion = sh(returnStdout: true, script: './mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout').trim()
+
+      def mvnVersion = sh(returnStdout: true, script: './mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout').trim()
+
+      cleanWs()
+      unstash 'service'
+      unstash 'dockerfile'
         def dockerImage
         dockerImage = docker.build('delivery-service', '.')
         docker.withRegistry('http://localhost:10000', 'admin_nexus') {
@@ -205,6 +208,7 @@ stage('Parallel Stage') {
         docker.withRegistry('http://localhost:10000', 'admin_nexus') {
             dockerImage.push "$mvnVersion"
         }
+        dockerImage = docker.build('dthibau/delivery-service', '.')
         docker.withRegistry('https://registry.hub.docker.com', 'dthibau_docker') {
             dockerImage.push "$mvnVersion"
         }
