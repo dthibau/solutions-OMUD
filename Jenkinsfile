@@ -110,7 +110,7 @@ stage('Parallel Stage') {
         sh ("envsubst < src/main/k8/postgres-config.yml | kubectl apply -f -")
         sh ("envsubst < src/main/k8/postgres-service.yml | kubectl apply -f -")
         sh ("envsubst < src/main/k8/delivery-service.yml | kubectl apply -f -")
-        
+        sh "kubectl expose deployment delivery-service-${BRANCH_NAME} --type LoadBalancer --port 80 --target-port 8080"
         
       }     
      }
@@ -122,7 +122,7 @@ stage('Parallel Stage') {
     agent any
     when { not { branch 'master' } } 
     steps {
-      sh "kubectl expose deployment delivery-service-${BRANCH_NAME} &"
+      sh "kubectl port-forward service/delivery-service 8080:80 &"
       sleep 30 // Laisser le service redémarrer
       echo 'Démarrage 1 users effectuant les 4 appels REST'
       sh './apache-jmeter-5.2.1/bin/jmeter -JSERVEUR=localhost -n -t Fonctionnel.jmx -l fonc_result.jtl'
@@ -134,7 +134,7 @@ stage('Parallel Stage') {
     agent any
     when { not { branch 'master' } } 
     steps {
-      sh "kubectl expose deployment delivery-service-${BRANCH_NAME} &"
+      sh "kubectl port-forward service/delivery-service 8080:80 &"
       echo 'Démarrage 100 users effectuant 50 fois le scénario de test'
       sh './apache-jmeter-5.2.1/bin/jmeter -JSERVEUR=localhost -n -t LoadTest.jmx -l result.jtl'
       perfReport 'result.jtl'
