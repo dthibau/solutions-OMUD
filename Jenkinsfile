@@ -87,21 +87,15 @@ stage('Parallel Stage') {
    }     
   }
 
-  stage('Deploiement via docker-compose') {
-    agent any
-    when { not { branch 'master' } } 
-    steps {
-      dir ('target/classes') {
-        sh 'docker-compose down'
-        sh 'docker-compose up -d'
-      }  
-     }
-    }
 
   stage('Test fonctionnel JMETER') {
     agent any
     when { not { branch 'master' } } 
     steps {
+       dir ('target/classes') {
+        sh 'docker-compose down'
+        sh 'docker-compose up -d'
+      }  
       sleep 30 // Laisser le service redémarrer
       echo 'Démarrage 1 users effectuant les 4 appels REST'
       sh './apache-jmeter-5.2.1/bin/jmeter -n -t Fonctionnel.jmx -l fonc_result.jtl'
@@ -113,6 +107,12 @@ stage('Parallel Stage') {
     agent any
     when { not { branch 'master' } } 
     steps {
+       dir ('target/classes') {
+        sh 'docker-compose down'
+        sh 'docker-compose up -d'
+      }  
+      sleep 30 // Laisser le service redémarrer
+
       echo 'Démarrage 100 users effectuant 50 fois le scénario de test'
       sh './apache-jmeter-5.2.1/bin/jmeter -n -t LoadTest.jmx -l result.jtl'
       perfReport 'result.jtl'
