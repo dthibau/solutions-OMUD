@@ -7,11 +7,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      name: delivery-${BRANCH_NAME}
+      name: delivery-service
   template:
     metadata:
       labels:
-        name: delivery-${BRANCH_NAME}
+        name: delivery-service
     spec:
       containers:
       - name: delivery-service
@@ -21,23 +21,23 @@ spec:
           - name: POSTGRES_USER
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_USER
           - name: POSTGRES_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_PASSWORD
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_DB
           - name: POSTGRES_SERVICE
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_SERVICE
-        image: ${IMAGE}
+        image: localhost:18082/delivery-service:0.0.3
         imagePullPolicy: Always
 

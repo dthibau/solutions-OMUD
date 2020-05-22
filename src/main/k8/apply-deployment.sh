@@ -1,11 +1,12 @@
 #! /bin/sh
 
-kubectl delete deployment/postgres-service
-kubectl delete deployment/delivery-service
+kubectl apply -f postgres-config.yml
+
+kubectl apply -f postgres-service.yml 
+
+kubectl apply -f delivery-service.yml
 
 
-kubectl delete service postgres-service
 
-kubectl delete configMap postgres-config
 
 
