@@ -208,6 +208,8 @@ stage('Parallel Stage') {
             dockerImage.push "$mvnVersion"
         }
      
+        // Roll-out sur kubernetes
+        sh "kubectl set image deployment/delivery-service delivery-service=dthibau/delivery-service:${mvnVersion}"
 
         echo 'Starting new version'
         // Setting new version 
