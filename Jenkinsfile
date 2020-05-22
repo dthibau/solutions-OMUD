@@ -87,16 +87,15 @@ stage('Parallel Stage') {
    }     
   }
 
-  stage('Deploiement Intégration Ansible') {
+  stage('Deploiement via docker-compose') {
     agent any
     when { not { branch 'master' } } 
     steps {
-      echo 'Deploiement en intégration via Ansible'
-      unstash 'service'
-      sh 'cp *SNAPSHOT.jar delivery-service.jar'
-      dir ('ansible') {
-        sh 'ansible-playbook delivery.yml -i hosts'
-      }
+      dir ('target/classes') {
+        sh 'docker-compose down'
+        sh 'docker-compose up -d'
+      }  
+     }
     }
   }
   stage('Test fonctionnel JMETER') {
