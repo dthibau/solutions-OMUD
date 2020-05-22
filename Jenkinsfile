@@ -59,7 +59,7 @@ stage('Parallel Stage') {
 
     steps {
       echo 'Deploying snapshot to Nexus.'
-      sh './mvnw --settings settings.xml -DskipTests clean deploy'
+      sh './mvnw --settings settings.xml -DskipTests -Pprod clean deploy'
       dir('target/') {
         stash includes: '*.jar', name: 'service'
       }
