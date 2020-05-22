@@ -125,7 +125,7 @@ stage('Parallel Stage') {
     steps {
       script {
         def portNumber = 80 + ("${BRANCH_NAME}".hashCode())%(65535-80)
-        sh "kubectl port-forward service/delivery-service 8080:${portNumber} &"
+        sh "kubectl port-forward service/delivery-service-${BRANCH_NAME}  8080:${portNumber} &"
       }
 
       sleep 30 // Laisser le service redémarrer
@@ -141,7 +141,7 @@ stage('Parallel Stage') {
     steps {
       script {
         def portNumber = 80 + ("${BRANCH_NAME}".hashCode())%(65535-80)
-        sh "kubectl port-forward service/delivery-service 8080:${portNumber} &"
+        sh "kubectl port-forward service/delivery-service-${BRANCH_NAME}  8080:${portNumber} &"
       }
       echo 'Démarrage 100 users effectuant 50 fois le scénario de test'
       sh './apache-jmeter-5.2.1/bin/jmeter -JSERVEUR=localhost -n -t LoadTest.jmx -l result.jtl'
