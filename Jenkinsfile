@@ -94,7 +94,8 @@ stage('Parallel Stage') {
     steps {
        dir ('target/classes') {
         sh 'docker-compose down'
-        sh 'docker-compose up -d'
+        sh 'docker-compose up -d --force-recreate'
+        sh 'docker image prune -f'
       }  
       sleep 30 // Laisser le service redémarrer
       echo 'Démarrage 1 users effectuant les 4 appels REST'
@@ -109,7 +110,8 @@ stage('Parallel Stage') {
     steps {
        dir ('target/classes') {
         sh 'docker-compose down'
-        sh 'docker-compose up -d'
+        sh 'docker-compose up -d --force-recreate'
+        sh 'docker image prune -f'
       }  
       sleep 30 // Laisser le service redémarrer
 
