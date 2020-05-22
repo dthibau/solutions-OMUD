@@ -97,7 +97,7 @@ stage('Parallel Stage') {
       }  
      }
     }
-  }
+
   stage('Test fonctionnel JMETER') {
     agent any
     when { not { branch 'master' } } 
